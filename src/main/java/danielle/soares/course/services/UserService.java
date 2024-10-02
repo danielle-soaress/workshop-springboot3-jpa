@@ -12,6 +12,7 @@ import danielle.soares.course.entities.User;
 import danielle.soares.course.repositories.UserRepository;
 import danielle.soares.course.services.exceptions.DatabaseException;
 import danielle.soares.course.services.exceptions.ResourceNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class UserService {
@@ -45,9 +46,13 @@ public class UserService {
 	}
 	
 	public User update(Long id, User obj) {
-		User entity = repository.getReferenceById(id); // é um objeto monitorado e não o objeto real do banco de dados
-		updateData(entity, obj);
-		return repository.save(entity);
+		try {
+			User entity = repository.getReferenceById(id); // é um objeto monitorado e não o objeto real do banco de dados
+			updateData(entity, obj);
+			return repository.save(entity);
+		} catch (EntityNotFoundException e) {
+			throw new ResourceNotFoundException(id);
+		}
 	}
 
 	private void updateData(User entity, User obj) {

@@ -25,7 +25,7 @@ public class ResourceExceptionHandler {
 	@ExceptionHandler(DatabaseException.class) // indica que esse método vai interceptar qualquer exceção desse tipo em destaque.
 	public ResponseEntity<StandardError> database(DatabaseException e, HttpServletRequest request) {
 		String error = "Database error";
-		HttpStatus status = HttpStatus.NOT_FOUND;
+		HttpStatus status = HttpStatus.BAD_REQUEST;
 		StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
 		return ResponseEntity.status(status).body(err);
 	}
