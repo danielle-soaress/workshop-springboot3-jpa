@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -41,8 +42,17 @@ public class UserResource {
 		obj = service.insert(obj);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").
 				buildAndExpand(obj.getId()).toUri();
+		// serve para retornar um código 201 indicando que o obj foi criado. Além disso, tbm adiciona o caminho para o novo objeto.
 		return ResponseEntity.created(uri).body(obj);
 		
+	}
+	
+	@DeleteMapping(value = "/{id}")
+	public ResponseEntity<Void> delete(@PathVariable Long id) { // pathvariable indica que o id vai vir na url
+		service.delete(id);
+		return ResponseEntity.noContent().build();
+		//no content retorna uma resposta sem corpo.
+		// o código da resposta nocontent é 204.
 	}
 	
 	
